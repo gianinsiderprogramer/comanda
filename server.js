@@ -9,7 +9,7 @@ try {
 }
 
 const { conversar, extraerDeConversacion, ErrorIA } = await import('./lib/ai.js');
-const { negocio, normalizarBorrador, listarPedidos, buscarPedido, crearPedido, cambiarEstado } = await import('./lib/pedidos.js');
+const { negocio, normalizarBorrador, preguntaPorFaltante, listarPedidos, buscarPedido, crearPedido, completarPedido, cambiarEstado } = await import('./lib/pedidos.js');
 
 const LARGO_MENSAJE = 500;
 const LARGO_CONVERSACION = 3000;
@@ -61,26 +61,47 @@ app.post('/api/conversar', limitarIA, async (req, res) => {
   }
 });
 
-app.post('/api/recalcular', (req, res) => res.json({ borrador: normalizarBorrador(req.body?.borrador) }));
+app.post('/api/recalcular', (req, res) => {
+  const borrador = normalizarBorrador(req.body?.borrador);
+  res.json({ borrador, pregunta: borrador.listo ? null : preguntaPorFaltante(borrador.faltantes[0]) });
+});
 
 app.get('/api/pedidos', (req, res) => res.json({ pedidos: listarPedidos() }));
 
 app.post('/api/pedidos', (req, res) => {
   const borrador = normalizarBorrador(req.body?.borrador);
-  const desdeLocal = req.body?.origen === 'whatsapp';
-
   if (!borrador.items.length) return res.status(400).json({ error: 'El pedido no tiene productos.' });
-  if (!desdeLocal && !borrador.listo) return res.status(400).json({ error: 'Faltan datos para confirmar el pedido.' });
-
-  res.status(201).json({ pedido: crearPedido(borrador, desdeLocal ? 'whatsapp' : 'web') });
+  if (!borrador.listo) return res.status(400).json({ error: 'Faltan datos para confirmar el pedido.' });
+  res.status(201).json({ pedido: crearPedido(borrador, 'web') });
 });
 
-app.post('/api/pedidos/desde-chat', limitarIA, async (req, res) => {
+function leerConversacion(req) {
   const texto = typeof req.body?.texto === 'string' ? req.body.texto.trim() : '';
+  return texto.slice(0, LARGO_CONVERSACION);
+}
+
+app.post('/api/pedidos/desde-chat', limitarIA, async (req, res) => {
+  const texto = leerConversacion(req);
   if (!texto) return res.status(400).json({ error: 'Pegá una conversación primero.' });
 
   try {
-    res.json(await extraerDeConversacion(texto.slice(0, LARGO_CONVERSACION)));
+    const { borrador, intencion, respuesta } = await extraerDeConversacion(texto, normalizarBorrador());
+    const pedido = intencion === 'pedido' && borrador.items.length ? crearPedido(borrador, 'whatsapp', respuesta) : null;
+    res.json({ pedido, respuesta });
+  } catch (error) {
+    responderError(res, error);
+  }
+});
+
+app.post('/api/pedidos/:id/completar', limitarIA, async (req, res) => {
+  const pedido = buscarPedido(req.params.id);
+  const texto = leerConversacion(req);
+  if (!pedido) return res.status(404).json({ error: 'No encontramos ese pedido.' });
+  if (!texto) return res.status(400).json({ error: 'Pegá lo que respondió el cliente.' });
+
+  try {
+    const { borrador, respuesta } = await extraerDeConversacion(texto, normalizarBorrador(pedido));
+    res.json({ pedido: completarPedido(pedido.id, borrador, respuesta) });
   } catch (error) {
     responderError(res, error);
   }

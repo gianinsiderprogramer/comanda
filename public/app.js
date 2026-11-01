@@ -72,6 +72,52 @@ function botonCantidad(texto, etiqueta, accion) {
   return boton;
 }
 
+function opcionesParaFaltante(faltante) {
+  if (faltante === 'entrega_tipo') {
+    return [
+      { texto: 'Con envío', cambios: { entrega_tipo: 'envio' } },
+      { texto: 'Paso a retirar', cambios: { entrega_tipo: 'retiro' } },
+    ];
+  }
+  if (faltante === 'zona') return negocio.zonas.map((z) => ({ texto: z.nombre, cambios: { zona_id: z.id } }));
+  if (faltante === 'medio_pago') return negocio.medios_pago.map((m) => ({ texto: m[0].toUpperCase() + m.slice(1), cambios: { medio_pago: m } }));
+  if (faltante?.startsWith('variante:')) {
+    const pendiente = borrador.items.find((i) => i.requiere_variante);
+    return pendiente.variantes.map((variante) => ({
+      texto: variante[0].toUpperCase() + variante.slice(1),
+      cambios: { items: borrador.items.map((i) => (i === pendiente ? { ...i, variante } : i)) },
+    }));
+  }
+  return [];
+}
+
+function mostrarOpciones() {
+  const contenedor = $('opciones');
+  contenedor.replaceChildren();
+  if (!borrador.items.length || borrador.listo) return;
+
+  for (const opcion of opcionesParaFaltante(borrador.faltantes[0])) {
+    const boton = document.createElement('button');
+    boton.type = 'button';
+    boton.textContent = opcion.texto;
+    boton.className = 'rounded-full border border-orange-700 text-orange-800 px-3 py-1 text-sm font-medium hover:bg-orange-50';
+    boton.addEventListener('click', () => elegirOpcion(opcion));
+    contenedor.append(boton);
+  }
+}
+
+// Los botones resuelven datos exactos en el server: no gastan una llamada a la IA.
+async function elegirOpcion(opcion) {
+  if (esperando) return;
+  mensajes.push({ rol: 'cliente', texto: opcion.texto });
+  agregarBurbuja('cliente', opcion.texto);
+  const { pregunta } = await recalcular({ ...borrador, ...opcion.cambios }) ?? {};
+  const texto = pregunta ?? '¡Listo! Revisá tu pedido y confirmalo.';
+  mensajes.push({ rol: 'bot', texto });
+  agregarBurbuja('bot', texto);
+  if (borrador.listo) $('ticket').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
 async function cambiarCantidad(item, delta) {
   const items = borrador.items
     .map((i) => (i === item ? { ...i, cantidad: i.cantidad + delta } : i))
@@ -84,14 +130,17 @@ async function recalcular(nuevo) {
     const datos = await llamar('/api/recalcular', { borrador: nuevo });
     borrador = datos.borrador;
     mostrarTicket();
+    return datos;
   } catch (error) {
     agregarBurbuja('bot', error.message);
+    return null;
   }
 }
 
 function mostrarTicket() {
   const ticket = $('ticket');
   ticket.replaceChildren();
+  mostrarOpciones();
 
   if (!borrador.items.length) {
     const vacio = document.createElement('p');

@@ -56,7 +56,7 @@ const casos = [
   {
     nombre: 'No deduce el barrio por la calle',
     mensajes: ['un pollo entero con envío a Mendoza 1234'],
-    ok: ({ borrador }) => borrador.direccion !== null && borrador.zona_id === null,
+    ok: ({ borrador, respuesta }) => borrador.direccion !== null && borrador.zona_id === null && /barrio/i.test(respuesta) && !/no llegamos/i.test(respuesta),
   },
   {
     nombre: 'Avisa si está fuera de zona',

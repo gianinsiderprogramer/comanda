@@ -4,9 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Comanda · Hacé tu pedido</title>
+  <meta name="description" content="Pedí como en WhatsApp, por mensaje o audio. La IA arma tu pedido y la rotisería lo recibe sin errores.">
+  <meta property="og:title" content="Comanda · Pedidos sin errores para rotiserías">
+  <meta property="og:description" content="El cliente escribe o manda un audio. La IA lo convierte en un pedido listo para cocina.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,700&family=IBM+Plex+Mono:wght@400;600&display=swap">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="tema.js"></script>
   <link rel="stylesheet" href="styles.css">
@@ -14,9 +19,12 @@
 <body class="bg-stone-100 text-stone-900 font-sans">
   <header class="bg-orange-700 text-white">
     <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
-      <div>
-        <h1 id="negocio" class="font-titulo text-2xl">Rotisería</h1>
-        <p class="text-sm text-orange-100">Pedí como en WhatsApp, sin esperar y sin errores.</p>
+      <div class="flex items-center gap-3 min-w-0">
+        <img src="logo.svg" alt="" class="logo">
+        <div class="min-w-0">
+          <h1 id="negocio" class="font-titulo text-2xl">Rotisería</h1>
+          <p class="text-sm text-orange-100">Escribí o mandá un audio. Nosotros lo anotamos.</p>
+        </div>
       </div>
       <a href="/panel" class="text-sm underline shrink-0">Soy del local</a>
     </div>
@@ -50,9 +58,9 @@
         <h2 class="font-semibold tracking-widest text-center pb-2 mb-3 border-b border-dashed border-stone-300">COMANDA</h2>
         <div id="ticket"></div>
       </section>
-      <details id="detalle-carta" class="bg-white rounded-xl shadow-sm p-4" open>
-        <summary class="font-bold cursor-pointer">Ver la carta</summary>
-        <p class="text-sm text-stone-600 mt-2">Tocá + para sumar sin escribir.</p>
+      <details id="detalle-carta" class="pizarra" open>
+        <summary class="pizarra-titulo cursor-pointer">La carta de hoy</summary>
+        <p class="text-sm text-stone-200 mt-1">Tocá + para sumar sin escribir.</p>
         <div id="carta" class="mt-3 space-y-3 text-sm"></div>
       </details>
     </aside>

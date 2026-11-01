@@ -10,11 +10,11 @@ Marcos: Corrientes 850, Centro, para las 21. Pago en efectivo. Mi cel es 3416667
 ];
 
 const COLUMNAS = [
-  { estado: 'pendiente', titulo: 'A responder' },
-  { estado: 'nuevo', titulo: 'Nuevos', accion: 'Empezar a preparar', siguiente: 'preparacion' },
-  { estado: 'preparacion', titulo: 'En preparación', accion: 'Marcar listo', siguiente: 'listo' },
-  { estado: 'listo', titulo: 'Listos', accion: 'Marcar entregado', siguiente: 'entregado' },
-  { estado: 'entregado', titulo: 'Entregados' },
+  { estado: 'pendiente', titulo: 'A responder', color: '#d98a00' },
+  { estado: 'nuevo', titulo: 'Nuevos', color: '#b8321f', accion: 'Empezar a preparar', siguiente: 'preparacion' },
+  { estado: 'preparacion', titulo: 'En preparación', color: '#c75b12', accion: 'Marcar listo', siguiente: 'listo' },
+  { estado: 'listo', titulo: 'Listos', color: '#15803d', accion: 'Marcar entregado', siguiente: 'entregado' },
+  { estado: 'entregado', titulo: 'Entregados', color: '#7d705f' },
 ];
 const ESTADOS_EN_COCINA = ['nuevo', 'preparacion'];
 const MINUTOS_ALERTA = 15;
@@ -102,7 +102,7 @@ function botonDescartar(pedido) {
 function tarjeta(pedido, columna, esNuevo) {
   const minutos = minutosDesde(pedido.creado);
   const demorado = ['pendiente', 'nuevo'].includes(pedido.estado) && minutos >= MINUTOS_ALERTA;
-  const elemento = nodo('article', `bg-white rounded-lg shadow-sm p-3 space-y-2 ${demorado ? 'ring-2 ring-red-600' : ''} ${esNuevo ? 'pedido-nuevo' : ''}`);
+  const elemento = nodo('article', `comanda-tarjeta space-y-2 ${demorado ? 'ring-2 ring-red-600' : ''} ${esNuevo ? 'pedido-nuevo' : ''}`);
 
   const encabezado = nodo('div', 'flex justify-between items-baseline gap-2');
   encabezado.append(
@@ -160,8 +160,8 @@ function mostrarCocina(pedidos) {
   $('lista-cocina').replaceChildren(...[...totales]
     .sort((a, b) => b[1] - a[1])
     .map(([nombre, cantidad]) => {
-      const elemento = nodo('li', 'rounded-lg bg-stone-800 px-3 py-2');
-      elemento.append(nodo('strong', 'text-xl text-orange-400 mr-2', cantidad), nodo('span', 'text-sm', nombre));
+      const elemento = nodo('li', 'flex items-baseline gap-2');
+      elemento.append(nodo('strong', 'pizarra-titulo text-orange-100', cantidad), nodo('span', 'text-sm', nombre));
       return elemento;
     }));
 }
@@ -173,8 +173,9 @@ function mostrarTablero(pedidos) {
 
   for (const columna of COLUMNAS) {
     const delEstado = pedidos.filter((p) => p.estado === columna.estado);
-    const seccion = nodo('section', 'bg-stone-200 rounded-xl p-3 space-y-3 min-h-40');
-    seccion.append(nodo('h2', 'font-bold', `${columna.titulo} (${delEstado.length})`));
+    const seccion = nodo('section', 'riel min-h-40');
+    seccion.style.setProperty('--color-riel', columna.color);
+    seccion.append(nodo('h2', 'font-bold mb-3', `${columna.titulo} (${delEstado.length})`));
     if (!delEstado.length) seccion.append(nodo('p', 'text-sm text-stone-500', 'Nada por acá.'));
     for (const pedido of delEstado) {
       seccion.append(tarjeta(pedido, columna, conocidos !== null && !conocidos.has(pedido.id)));

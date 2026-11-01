@@ -384,14 +384,14 @@ function mostrarCarta() {
   const categorias = Map.groupBy(negocio.productos, (p) => p.categoria);
   for (const [categoria, productos] of categorias) {
     const titulo = document.createElement('h3');
-    titulo.className = 'font-bold text-orange-800';
+    titulo.className = 'pizarra-categoria';
     titulo.textContent = categoria;
     const lista = document.createElement('ul');
     lista.className = 'space-y-1 mt-1';
     for (const producto of productos) {
       const elemento = document.createElement('li');
-      elemento.className = producto.disponible ? 'flex items-center gap-2' : 'flex items-center gap-2 text-stone-500';
-      const detalle = fila(producto.disponible ? producto.nombre : `${producto.nombre} (hoy no hay)`, pesos(producto.precio), 'flex-1 min-w-0');
+      elemento.className = producto.disponible ? 'flex items-center gap-2' : 'flex items-center gap-2 agotado';
+      const detalle = fila(producto.disponible ? producto.nombre : `${producto.nombre} (hoy no hay)`, pesos(producto.precio), 'pizarra-precio');
       elemento.append(detalle);
       if (producto.disponible) elemento.append(botonCantidad('+', `Sumar ${producto.nombre}`, () => sumarDeLaCarta(producto)));
       lista.append(elemento);

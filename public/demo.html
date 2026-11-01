@@ -4,20 +4,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Comanda · Demo</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,700&display=swap">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="tema.js"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-stone-900 text-white font-sans min-h-screen flex flex-col">
   <header class="px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-    <div>
-      <h1 class="font-titulo text-2xl">Comanda</h1>
-      <p class="text-sm text-stone-300">Del mensaje del cliente a la cocina, sin que nada se pierda.</p>
+    <div class="flex items-center gap-3">
+      <img src="logo.svg" alt="" class="logo">
+      <div>
+        <h1 class="font-titulo text-2xl">Comanda</h1>
+        <p class="text-sm text-stone-300">Del mensaje del cliente a la cocina, sin que nada se pierda.</p>
+      </div>
     </div>
-    <div class="flex flex-wrap items-center gap-3">
-      <p id="resumen-pico" class="text-sm text-orange-400 font-bold" aria-live="polite"></p>
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+      <dl id="resumen-pico" class="flex flex-wrap gap-x-5 gap-y-1" aria-live="polite"></dl>
       <button id="hora-pico" type="button" class="rounded-lg bg-orange-700 hover:bg-orange-800 font-bold px-4 py-2 disabled:opacity-50">Simular hora pico</button>
     </div>
   </header>

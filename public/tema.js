@@ -24,6 +24,7 @@ tailwind.config = {
         sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
         titulo: ['Fraunces', 'Georgia', 'serif'],
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        tiza: ['Caveat', 'cursive'],
       },
     },
   },

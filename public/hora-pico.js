@@ -123,9 +123,25 @@ async function usarRespaldo(mensaje, estado, resumen) {
   }
 }
 
+function mostrarResultado(datos) {
+  $('resumen-pico').replaceChildren(...datos.map(([valor, etiqueta], indice) => {
+    const grupo = document.createElement('div');
+    grupo.className = 'dato-pico text-center';
+    grupo.style.animationDelay = `${indice * 120}ms`;
+    const numero = document.createElement('dd');
+    numero.className = 'font-titulo text-3xl text-orange-400 leading-none';
+    numero.textContent = valor;
+    const texto = document.createElement('dt');
+    texto.className = 'text-xs text-stone-300';
+    texto.textContent = etiqueta;
+    grupo.append(numero, texto);
+    return grupo;
+  }));
+}
+
 async function simular() {
   $('hora-pico').disabled = true;
-  $('resumen-pico').textContent = '';
+  $('resumen-pico').replaceChildren();
   $('mensajes').replaceChildren();
   $('cliente').classList.add('hidden');
   $('mensajes').classList.remove('hidden');
@@ -143,7 +159,13 @@ async function simular() {
   }));
 
   const segundos = ((performance.now() - inicio) / 1000).toFixed(1);
-  $('resumen-pico').textContent = `${MENSAJES.length} mensajes en ${segundos} s: ${resumen.cocina} a cocina, ${resumen.responder} a responder, ${resumen.consultas} consulta${resumen.consultas === 1 ? '' : 's'}${resumen.respaldo ? ' (con resultados guardados)' : ''}`;
+  mostrarResultado([
+    [MENSAJES.length, 'mensajes'],
+    [`${segundos} s`, resumen.respaldo ? 'con respaldo' : 'con IA'],
+    [resumen.cocina, 'a cocina'],
+    [resumen.responder, 'a responder'],
+    [resumen.consultas, resumen.consultas === 1 ? 'consulta' : 'consultas'],
+  ]);
   $('hora-pico').disabled = false;
   $('hora-pico').textContent = 'Repetir hora pico';
 }

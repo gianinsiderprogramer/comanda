@@ -89,6 +89,11 @@ const casos = [
     ok: ({ borrador, respuesta }) => borrador.listo && !respuesta.includes('?'),
   },
   {
+    nombre: 'Un pollo es un pollo entero',
+    mensajes: ['me mandás un pollo y una ensalada'],
+    ok: ({ borrador }) => cantidadDe(borrador, 'pollo_entero') === 1 && cantidadDe(borrador, 'pollo_medio') === 0,
+  },
+  {
     nombre: 'No inventa precios en la respuesta',
     mensajes: ['2 milanesas de carne y una coca, cuánto sale?'],
     ok: ({ borrador, respuesta }) => cantidadDe(borrador, 'milanesa_papas', 'carne') === 2 && !/\$\s?\d/.test(respuesta),
@@ -100,6 +105,16 @@ const casosWhatsApp = [
     nombre: 'WhatsApp: se queda con lo último acordado',
     texto: 'Marcos: dale mandame un pollo entero con papas\nMarcos: ah y 2 flanes\nMarcos: no perdón, un solo flan\nEl Patio: ¿a dónde te lo mando?\nMarcos: Corrientes 850, Centro. Pago en efectivo. Mi cel es 3416667788',
     ok: ({ borrador, respuesta }) => cantidadDe(borrador, 'flan') === 1 && borrador.listo && !/en camino|ya sali/i.test(respuesta),
+  },
+  {
+    nombre: 'WhatsApp: pregunta el tipo antes que el envío',
+    texto: 'Flor: 3 milanesas con papas porfa',
+    ok: ({ borrador, respuesta }) => cantidadDe(borrador, 'milanesa_papas') === 3 && /carne, pollo/.test(respuesta),
+  },
+  {
+    nombre: 'WhatsApp: avisa lo que no pudo sumar',
+    texto: 'Lucho: 2 muzzas y una fugazzeta, Oroño 1200 Pichincha, lucho 3417004455, mp',
+    ok: ({ borrador, respuesta }) => borrador.cliente_nombre === 'Lucho' && /fugazzeta/i.test(respuesta) && cantidadDe(borrador, 'fugazzeta') === 0,
   },
   {
     nombre: 'WhatsApp: una consulta no crea pedido',

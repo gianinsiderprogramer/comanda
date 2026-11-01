@@ -94,7 +94,7 @@ async function procesar(mensaje, resumen) {
       body: JSON.stringify({ texto: `${mensaje.nombre}: ${mensaje.texto}`, simulacion: true }),
     });
     if (pedido) {
-      contarResultado(resumen, pedido, estado, sinStock.length ? ' (sin stock: avisado)' : '');
+      contarResultado(resumen, pedido, estado, sinStock.length ? ` · no sumó: ${sinStock.join(', ')}` : '');
     } else {
       resumen.consultas++;
       marcar(estado, `Consulta respondida: ${respuesta}`, 'text-stone-600');

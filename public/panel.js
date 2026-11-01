@@ -111,6 +111,7 @@ function tarjeta(pedido, columna, esNuevo) {
   elemento.append(encabezado, lista, datos, pago);
 
   if (pedido.origen === 'whatsapp') elemento.append(nodo('span', 'inline-block text-xs bg-green-100 text-green-800 rounded px-2 py-0.5', 'Desde WhatsApp'));
+  if (pedido.no_encontrados.length) elemento.append(nodo('p', 'text-sm text-amber-900', `No se sumó: ${pedido.no_encontrados.join(', ')}`));
 
   if (pedido.estado === 'pendiente') {
     elemento.append(

@@ -9,7 +9,7 @@ try {
 }
 
 const { conversar, extraerDeConversacion, transcribir, ErrorIA } = await import('./lib/ai.js');
-const { negocio, normalizarBorrador, preguntaPorFaltante, listarPedidos, buscarPedido, crearPedido, completarPedido, cambiarEstado, borrarSimulacion } = await import('./lib/pedidos.js');
+const { negocio, normalizarBorrador, preguntaPorFaltante, listarPedidos, buscarPedido, crearPedido, completarPedido, cambiarEstado, borrarSimulacion, reiniciarDemo } = await import('./lib/pedidos.js');
 
 const LARGO_MENSAJE = 500;
 const LARGO_CONVERSACION = 3000;
@@ -82,6 +82,8 @@ app.delete('/api/pedidos/simulacion', (req, res) => {
   res.json({ ok: true });
 });
 
+app.post('/api/demo/reiniciar', (req, res) => res.json({ pedidos: reiniciarDemo() }));
+
 app.post('/api/transcribir', limitarIA, express.raw({ type: 'audio/*', limit: `${MB_AUDIO}mb` }), async (req, res) => {
   if (!Buffer.isBuffer(req.body) || !req.body.length) return res.status(400).json({ error: 'No recibimos ningún audio.' });
 
@@ -104,7 +106,7 @@ app.post('/api/pedidos/desde-chat', limitarIA, async (req, res) => {
   if (!texto) return res.status(400).json({ error: 'Pegá una conversación primero.' });
 
   try {
-    const { borrador, intencion, respuesta } = await extraerDeConversacion(texto, normalizarBorrador());
+    const { borrador, intencion, respuesta } = await extraerDeConversacion(texto, normalizarBorrador({}, { requiereTelefono: false }));
     const simulacion = req.body?.simulacion === true;
     const pedido = intencion === 'pedido' && borrador.items.length ? crearPedido(borrador, 'whatsapp', respuesta, simulacion) : null;
     res.json({ pedido, respuesta, no_encontrados: borrador.no_encontrados });
@@ -120,7 +122,7 @@ app.post('/api/pedidos/:id/completar', limitarIA, async (req, res) => {
   if (!texto) return res.status(400).json({ error: 'Pegá lo que respondió el cliente.' });
 
   try {
-    const { borrador, respuesta } = await extraerDeConversacion(texto, normalizarBorrador(pedido), pedido.mensaje_sugerido);
+    const { borrador, respuesta } = await extraerDeConversacion(texto, normalizarBorrador(pedido, { requiereTelefono: false }), pedido.mensaje_sugerido);
     res.json({ pedido: completarPedido(pedido.id, borrador, respuesta) });
   } catch (error) {
     responderError(res, error);
@@ -135,7 +137,7 @@ app.get('/api/pedidos/:id', (req, res) => {
 
 app.patch('/api/pedidos/:id', (req, res) => {
   const pedido = cambiarEstado(req.params.id, req.body?.estado);
-  if (!pedido) return res.status(400).json({ error: 'No pudimos actualizar el pedido.' });
+  if (!pedido) return res.status(400).json({ error: 'No pudimos actualizar el pedido. Revisá que no le falten datos.' });
   res.json({ pedido });
 });
 

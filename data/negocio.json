@@ -18,6 +18,7 @@
     { "id": "pollo_entero", "nombre": "Pollo al spiedo entero", "categoria": "Spiedo", "precio": 19000, "variantes": [], "disponible": true, "sin_tacc": true },
     { "id": "pollo_medio", "nombre": "Medio pollo al spiedo", "categoria": "Spiedo", "precio": 10500, "variantes": [], "disponible": true, "sin_tacc": true },
     { "id": "milanesa_papas", "nombre": "Milanesa con papas fritas", "categoria": "Platos", "precio": 14000, "variantes": ["carne", "pollo"], "disponible": true, "sin_tacc": false },
+    { "id": "milanesa_napolitana", "nombre": "Milanesa napolitana con papas fritas", "categoria": "Platos", "precio": 16500, "variantes": [], "disponible": true, "sin_tacc": false },
     { "id": "pastel_papa", "nombre": "Pastel de papa", "categoria": "Platos", "precio": 11000, "variantes": [], "disponible": true, "sin_tacc": true },
     { "id": "tarta", "nombre": "Tarta individual", "categoria": "Platos", "precio": 8500, "variantes": ["jamón y queso", "verdura", "calabaza"], "disponible": true, "sin_tacc": false },
     { "id": "pizza_muzza", "nombre": "Pizza de muzzarella", "categoria": "Pizzas", "precio": 12000, "variantes": [], "disponible": true, "sin_tacc": false },

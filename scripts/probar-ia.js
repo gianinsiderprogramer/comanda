@@ -113,13 +113,25 @@ const casos = [
 const casosWhatsApp = [
   {
     nombre: 'WhatsApp: se queda con lo último acordado',
-    texto: 'Marcos: dale mandame un pollo entero con papas\nMarcos: ah y 2 flanes\nMarcos: no perdón, un solo flan\nEl Patio: ¿a dónde te lo mando?\nMarcos: Corrientes 850, Centro. Pago en efectivo. Mi cel es 3416667788',
+    texto: 'Marcos: dale mandame un pollo entero con papas\nMarcos: ah y 2 flanes\nMarcos: no perdón, un solo flan\nEl Patio: ¿a dónde te lo mando?\nMarcos: Corrientes 850, Centro, para las 21. Pago en efectivo. Mi cel es 3416667788',
     ok: ({ borrador, respuesta }) => cantidadDe(borrador, 'flan') === 1 && borrador.listo && !/en camino|ya sali/i.test(respuesta),
   },
   {
     nombre: 'WhatsApp: pregunta el tipo antes que el envío',
     texto: 'Flor: 3 milanesas con papas porfa',
-    ok: ({ borrador, respuesta }) => cantidadDe(borrador, 'milanesa_papas') === 3 && /carne, pollo/.test(respuesta),
+    ok: ({ borrador, respuesta }) => cantidadDe(borrador, 'milanesa_papas') === 3 && /carne/i.test(respuesta) && /pollo/i.test(respuesta) && /env[ií]o|retir/i.test(respuesta),
+  },
+  {
+    nombre: 'WhatsApp: mensaje desordenado con napolitana y alternativa',
+    texto: 'hola buenas!! me mandas 2 milas a la napo y media docena de empanadas, de pollo si hay sino de carne. ah y una coca grande. paso a buscar tipo 9 y media',
+    ok: ({ borrador, respuesta }) => cantidadDe(borrador, 'milanesa_napolitana') === 2
+      && cantidadDe(borrador, 'empanada', 'pollo') === 6
+      && /carne/i.test(borrador.items.find((i) => i.producto_id === 'empanada').nota ?? '')
+      && cantidadDe(borrador, 'coca_15') === 1
+      && borrador.entrega_tipo === 'retiro'
+      && borrador.hora === '21:30'
+      && borrador.faltantes.join() === 'nombre,medio_pago'
+      && /nombre|qui[eé]n/i.test(respuesta) && /pag/i.test(respuesta),
   },
   {
     nombre: 'WhatsApp: avisa lo que no pudo sumar',

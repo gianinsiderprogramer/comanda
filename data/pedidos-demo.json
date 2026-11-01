@@ -1,0 +1,60 @@
+[
+  {
+    "estado": "entregado",
+    "minutos": 48,
+    "origen": "web",
+    "items": [{ "producto_id": "pollo_entero", "cantidad": 1 }, { "producto_id": "papas", "cantidad": 1 }],
+    "entrega_tipo": "retiro",
+    "hora": "20:15",
+    "cliente_nombre": "Laura",
+    "telefono": "3415551234",
+    "medio_pago": "efectivo"
+  },
+  {
+    "estado": "listo",
+    "minutos": 31,
+    "origen": "whatsapp",
+    "items": [{ "producto_id": "empanada", "variante": "carne", "cantidad": 6 }, { "producto_id": "empanada", "variante": "jamón y queso", "cantidad": 6 }],
+    "entrega_tipo": "retiro",
+    "hora": "20:45",
+    "cliente_nombre": "Nico",
+    "telefono": "3415002233",
+    "medio_pago": "transferencia",
+    "mensaje_sugerido": "¡Listo, Nico! Ya tomamos tu pedido."
+  },
+  {
+    "estado": "preparacion",
+    "minutos": 14,
+    "origen": "web",
+    "items": [{ "producto_id": "milanesa_napolitana", "cantidad": 2 }, { "producto_id": "coca_15", "cantidad": 1 }],
+    "entrega_tipo": "envio",
+    "direccion": "Mitre 450",
+    "zona_id": "centro",
+    "hora": "21:00",
+    "cliente_nombre": "Caro",
+    "telefono": "3414001122",
+    "medio_pago": "mercadopago"
+  },
+  {
+    "estado": "nuevo",
+    "minutos": 4,
+    "origen": "whatsapp",
+    "items": [{ "producto_id": "empanada", "variante": "carne", "cantidad": 12 }, { "producto_id": "coca_15", "cantidad": 1 }],
+    "entrega_tipo": "envio",
+    "direccion": "San Luis 900",
+    "zona_id": "centro",
+    "hora": "21:30",
+    "cliente_nombre": "Beto",
+    "telefono": "3418005566",
+    "medio_pago": "efectivo",
+    "mensaje_sugerido": "¡Listo, Beto! Ya tomamos tu pedido."
+  },
+  {
+    "estado": "pendiente",
+    "minutos": 2,
+    "origen": "whatsapp",
+    "items": [{ "producto_id": "milanesa_papas", "cantidad": 3 }],
+    "cliente_nombre": "Vale",
+    "mensaje_sugerido": "¡Hola, Vale! Te anoto 3 milanesas con papas. ¿Las querés de carne o de pollo? ¿Con envío o pasás a retirar? ¿Para qué hora? ¿Cómo pagás: efectivo, transferencia o mercadopago?"
+  }
+]

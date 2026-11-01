@@ -94,7 +94,7 @@ const casosWhatsApp = [
   {
     nombre: 'WhatsApp: se queda con lo último acordado',
     texto: 'Marcos: dale mandame un pollo entero con papas\nMarcos: ah y 2 flanes\nMarcos: no perdón, un solo flan\nEl Patio: ¿a dónde te lo mando?\nMarcos: Corrientes 850, Centro. Pago en efectivo. Mi cel es 3416667788',
-    ok: ({ borrador }) => cantidadDe(borrador, 'flan') === 1 && borrador.listo,
+    ok: ({ borrador, respuesta }) => cantidadDe(borrador, 'flan') === 1 && borrador.listo && !/en camino|ya sali/i.test(respuesta),
   },
   {
     nombre: 'WhatsApp: una consulta no crea pedido',

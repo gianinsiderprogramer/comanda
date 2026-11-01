@@ -12,7 +12,9 @@ Hoy el dueño de una rotisería pierde ventas en la hora pico: los mensajes se p
 2. Revisá el ticket, ajustá cantidades y tocá **Confirmar pedido**.
 3. Abrí `/panel`: el pedido entró al tablero. Avanzalo de estado y avisale al cliente por WhatsApp.
 
-En `/panel` también podés pegar una conversación de WhatsApp o una nota de un llamado y la IA carga el pedido.
+En `/panel` también podés pegar una conversación de WhatsApp o una nota de un llamado. La IA carga el pedido, y si falta algo lo deja en **A responder** con el mensaje sugerido para el cliente. La franja **Qué cocinar ahora** suma todo lo pendiente por producto y gusto.
+
+Para ver cliente y local lado a lado, entrá a `/demo`.
 
 ## Cómo usa la IA
 
@@ -21,7 +23,7 @@ En `/panel` también podés pegar una conversación de WhatsApp o una nota de un
 - **Sabe qué pasó con el pedido:** toma cambios como "sacale la coca" y resuelve consultas de horarios, zonas o sin TACC con los datos del negocio.
 - **Devuelve datos, no texto:** usa Structured Outputs con un JSON schema, y los productos solo pueden ser los de la carta.
 
-**Por qué es confiable:** el modelo nunca define el precio. El servidor valida cada producto, gusto y zona contra `data/negocio.json`, calcula promos y total, y exige los datos completos antes de confirmar. Si la respuesta no pasa la validación, reintenta una vez. Si la IA falla, el usuario ve un mensaje claro y no pierde lo que escribió.
+**Por qué es confiable:** el modelo nunca define el precio. El servidor valida cada producto, gusto y zona contra `data/negocio.json`, calcula promos y total, y exige los datos completos antes de confirmar. Si la respuesta no pasa la validación, reintenta una vez. Si la IA falla, el usuario ve un mensaje claro, no pierde lo que escribió y puede terminar el pedido desde la carta. Las pruebas de calidad de la IA están en `scripts/probar-ia.js`.
 
 ## Stack
 

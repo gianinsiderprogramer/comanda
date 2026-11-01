@@ -120,7 +120,7 @@ app.post('/api/pedidos/:id/completar', limitarIA, async (req, res) => {
   if (!texto) return res.status(400).json({ error: 'Pegá lo que respondió el cliente.' });
 
   try {
-    const { borrador, respuesta } = await extraerDeConversacion(texto, normalizarBorrador(pedido));
+    const { borrador, respuesta } = await extraerDeConversacion(texto, normalizarBorrador(pedido), pedido.mensaje_sugerido);
     res.json({ pedido: completarPedido(pedido.id, borrador, respuesta) });
   } catch (error) {
     responderError(res, error);

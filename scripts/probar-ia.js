@@ -94,6 +94,16 @@ const casos = [
     ok: ({ borrador }) => cantidadDe(borrador, 'pollo_entero') === 1 && cantidadDe(borrador, 'pollo_medio') === 0,
   },
   {
+    nombre: 'No reparte gustos por el cliente',
+    mensajes: ['2 milanesas con papas'],
+    ok: ({ borrador }) => cantidadDe(borrador, 'milanesa_papas', null) === 2,
+  },
+  {
+    nombre: 'Un gusto suelto responde la pregunta',
+    mensajes: ['2 milanesas con papas', 'pollo'],
+    ok: ({ borrador }) => cantidadDe(borrador, 'milanesa_papas', 'pollo') === 2 && cantidadDe(borrador, 'pollo_entero') === 0,
+  },
+  {
     nombre: 'No inventa precios en la respuesta',
     mensajes: ['2 milanesas de carne y una coca, cuánto sale?'],
     ok: ({ borrador, respuesta }) => cantidadDe(borrador, 'milanesa_papas', 'carne') === 2 && !/\$\s?\d/.test(respuesta),
@@ -115,6 +125,13 @@ const casosWhatsApp = [
     nombre: 'WhatsApp: avisa lo que no pudo sumar',
     texto: 'Lucho: 2 muzzas y una fugazzeta, Oroño 1200 Pichincha, lucho 3417004455, mp',
     ok: ({ borrador, respuesta }) => borrador.cliente_nombre === 'Lucho' && /fugazzeta/i.test(respuesta) && cantidadDe(borrador, 'fugazzeta') === 0,
+  },
+  {
+    nombre: 'WhatsApp: "pollo" completa la milanesa pendiente',
+    texto: 'pollo',
+    pedidoActual: { items: [{ producto_id: 'milanesa_papas', cantidad: 2 }] },
+    ultimoMensaje: 'Milanesa con papas fritas: ¿cuál querés? Tenemos carne, pollo.',
+    ok: ({ borrador }) => cantidadDe(borrador, 'milanesa_papas', 'pollo') === 2 && cantidadDe(borrador, 'pollo_entero') === 0,
   },
   {
     nombre: 'WhatsApp: una consulta no crea pedido',
@@ -151,7 +168,9 @@ async function evaluar(caso, ejecutar) {
 }
 
 for (const caso of casos) await evaluar(caso, () => correrCaso(caso));
-for (const caso of casosWhatsApp) await evaluar(caso, () => extraerDeConversacion(caso.texto));
+for (const caso of casosWhatsApp) {
+  await evaluar(caso, () => extraerDeConversacion(caso.texto, normalizarBorrador(caso.pedidoActual), caso.ultimoMensaje));
+}
 
 console.log(`\n${aprobados} de ${total} pruebas aprobadas`);
 process.exit(aprobados === total ? 0 : 1);

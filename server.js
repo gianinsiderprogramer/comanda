@@ -9,7 +9,7 @@ try {
 }
 
 const { conversar, extraerDeConversacion, transcribir, ErrorIA } = await import('./lib/ai.js');
-const { negocio, normalizarBorrador, preguntaPorFaltante, listarPedidos, buscarPedido, crearPedido, completarPedido, cambiarEstado, borrarSimulacion, reiniciarDemo } = await import('./lib/pedidos.js');
+const { negocio, normalizarBorrador, preguntaPorFaltante, listarPedidos, buscarPedido, crearPedido, completarPedido, cambiarEstado, borrarSimulacion, reiniciarDemo, descartarPedido } = await import('./lib/pedidos.js');
 
 const LARGO_MENSAJE = 500;
 const LARGO_CONVERSACION = 3000;
@@ -79,6 +79,11 @@ app.post('/api/pedidos', (req, res) => {
 
 app.delete('/api/pedidos/simulacion', (req, res) => {
   borrarSimulacion();
+  res.json({ ok: true });
+});
+
+app.delete('/api/pedidos/:id', (req, res) => {
+  if (!descartarPedido(req.params.id)) return res.status(400).json({ error: 'Solo se pueden descartar pedidos a responder.' });
   res.json({ ok: true });
 });
 

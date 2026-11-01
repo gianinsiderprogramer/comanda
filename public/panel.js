@@ -21,6 +21,7 @@ const MINUTOS_ALERTA = 15;
 
 const $ = (id) => document.getElementById(id);
 const pesos = (n) => `$${n.toLocaleString('es-AR')}`;
+const enDemo = new URLSearchParams(location.search).has('demo');
 
 let conocidos = null;
 let ejemploActual = 0;
@@ -86,6 +87,18 @@ function formularioCompletar(pedido) {
   return formulario;
 }
 
+function botonDescartar(pedido) {
+  const boton = nodo('button', 'block text-sm text-stone-600 underline', 'Descartar');
+  boton.type = 'button';
+  boton.addEventListener('click', async () => {
+    if (!confirm(`¿Descartar el pedido #${pedido.id}?`)) return;
+    const { error } = await enviar(`/api/pedidos/${pedido.id}`, {}, 'DELETE');
+    if (error) mostrarMensaje(error, true);
+    actualizar();
+  });
+  return boton;
+}
+
 function tarjeta(pedido, columna, esNuevo) {
   const minutos = minutosDesde(pedido.creado);
   const demorado = ['pendiente', 'nuevo'].includes(pedido.estado) && minutos >= MINUTOS_ALERTA;
@@ -118,6 +131,7 @@ function tarjeta(pedido, columna, esNuevo) {
       nodo('p', 'text-sm rounded bg-amber-100 text-amber-900 px-2 py-1', `Sugerido: ${pedido.mensaje_sugerido}`),
       botonWhatsApp(pedido, 'Responder', pedido.mensaje_sugerido),
       formularioCompletar(pedido),
+      botonDescartar(pedido),
     );
   }
 
@@ -275,5 +289,7 @@ $('ejemplo').addEventListener('click', () => {
   extraer();
 });
 
+if (enDemo) $('reiniciar').classList.remove('hidden');
+
 actualizar();
-setInterval(actualizar, new URLSearchParams(location.search).has('demo') ? 1000 : 3000);
+setInterval(actualizar, enDemo ? 1000 : 3000);

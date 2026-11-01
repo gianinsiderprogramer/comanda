@@ -404,6 +404,9 @@ $('formulario').addEventListener('submit', (evento) => {
   evento.preventDefault();
   enviarMensaje($('mensaje').value);
 });
+// Dentro de /demo esta pantalla va en un iframe y la franja de presentación sobra.
+if (window.self !== window.top) $('presentacion').classList.add('hidden');
+
 $('ejemplo').addEventListener('click', () => enviarMensaje(MENSAJE_EJEMPLO));
 $('nuevo').addEventListener('click', reiniciar);
 crearGrabador($('microfono'), {

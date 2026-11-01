@@ -146,6 +146,11 @@ const casosWhatsApp = [
     ok: ({ borrador }) => cantidadDe(borrador, 'milanesa_papas', 'pollo') === 2 && cantidadDe(borrador, 'pollo_entero') === 0,
   },
   {
+    nombre: 'WhatsApp: "me mandás" cuenta como envío',
+    texto: 'Maru: me mandás un pollo? ah y ensalada. después te paso la dirección',
+    ok: ({ borrador }) => borrador.entrega_tipo === 'envio' && borrador.faltantes.includes('direccion') && !borrador.faltantes.includes('entrega_tipo'),
+  },
+  {
     nombre: 'WhatsApp: una consulta no crea pedido',
     texto: 'Ana: hola, abren los lunes?',
     ok: ({ intencion, borrador }) => intencion !== 'pedido' || borrador.items.length === 0,

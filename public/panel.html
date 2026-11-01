@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comanda · Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-stone-100 text-stone-900">
+  <header class="bg-stone-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h1 class="text-xl font-bold">Comanda · Pedidos del día</h1>
+        <p id="resumen" class="text-sm text-stone-300">Sin pedidos todavía</p>
+      </div>
+      <a href="/" class="text-sm underline">Ver como cliente</a>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-4 space-y-4">
+    <details class="bg-white rounded-xl shadow-sm p-4">
+      <summary class="font-semibold cursor-pointer">Cargar un pedido de WhatsApp o teléfono</summary>
+      <p class="text-sm text-stone-600 mt-2">Pegá la conversación y la IA arma el pedido por vos.</p>
+      <textarea id="conversacion" rows="5" maxlength="3000" aria-label="Conversación de WhatsApp" class="mt-2 w-full rounded-lg border border-stone-300 p-2"></textarea>
+      <div class="flex flex-wrap gap-2 mt-2">
+        <button id="extraer" type="button" class="rounded-lg bg-orange-700 text-white font-semibold px-4 py-2 disabled:opacity-50">Armar pedido</button>
+        <button id="ejemplo" type="button" class="rounded-lg border border-stone-300 px-4 py-2">Probar con un ejemplo</button>
+      </div>
+      <p id="error-chat" class="hidden mt-2 text-red-700 text-sm"></p>
+      <div id="resultado-chat" class="hidden mt-3 rounded-lg bg-stone-100 p-3 text-sm space-y-2"></div>
+    </details>
+
+    <div id="tablero" class="grid gap-4 md:grid-cols-2 xl:grid-cols-4"></div>
+  </main>
+
+  <script src="panel.js"></script>
+</body>
+</html>

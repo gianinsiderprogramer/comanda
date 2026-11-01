@@ -84,6 +84,11 @@ const casos = [
     ok: ({ borrador }) => borrador.entrega_tipo === 'retiro' && cantidadDe(borrador, 'pollo_medio') === 1,
   },
   {
+    nombre: 'No repregunta si el retiro ya está completo',
+    mensajes: ['hola, haceme 6 de carne y una coca, paso a buscar a las 21. Soy Juan 3415550000, pago con mercadopago'],
+    ok: ({ borrador, respuesta }) => borrador.listo && !respuesta.includes('?'),
+  },
+  {
     nombre: 'No inventa precios en la respuesta',
     mensajes: ['2 milanesas de carne y una coca, cuánto sale?'],
     ok: ({ borrador, respuesta }) => cantidadDe(borrador, 'milanesa_papas', 'carne') === 2 && !/\$\s?\d/.test(respuesta),

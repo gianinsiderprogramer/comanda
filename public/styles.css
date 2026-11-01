@@ -56,6 +56,18 @@ body {
   }
 }
 
+.grabando {
+  background: #b8321f !important;
+  color: #fff !important;
+  animation: pulso 1.2s infinite;
+}
+
+@keyframes pulso {
+  50% {
+    box-shadow: 0 0 0 6px rgb(184 50 31 / 0.25);
+  }
+}
+
 .pedido-nuevo {
   animation: destello 1.5s ease-out;
 }
@@ -114,6 +126,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .escribiendo span,
+  .grabando,
   .pedido-nuevo {
     animation: none;
   }

@@ -30,7 +30,10 @@
       </div>
       <div id="opciones" class="px-4 pb-2 flex flex-wrap gap-2 empty:hidden"></div>
       <form id="formulario" class="p-3 border-t border-stone-200 flex gap-2">
-        <input id="mensaje" maxlength="500" autocomplete="off" placeholder="Ej: 6 de carne y una coca para las 21" aria-label="Tu mensaje" class="flex-1 min-w-0 rounded-lg border border-stone-300 px-3 py-2 focus:outline-orange-700">
+        <input id="mensaje" maxlength="500" autocomplete="off" placeholder="Escribí o mandá un audio" aria-label="Tu mensaje" class="flex-1 min-w-0 rounded-lg border border-stone-300 px-3 py-2 focus:outline-orange-700">
+        <button id="microfono" type="button" aria-label="Grabar un audio" class="shrink-0 w-10 h-10 grid place-items-center rounded-lg border border-orange-700 text-orange-700 hover:bg-orange-50">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+        </button>
         <button id="enviar" class="rounded-lg bg-orange-700 text-white font-bold px-4 py-2 hover:bg-orange-800 disabled:opacity-50">Enviar</button>
       </form>
     </section>
@@ -61,6 +64,7 @@
     </section>
   </main>
 
+  <script src="audio.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

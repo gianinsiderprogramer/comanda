@@ -219,7 +219,18 @@ function mostrarMensaje(texto, esError = false) {
   mensaje.classList.toggle('text-green-800', !esError);
 }
 
-async function extraer() {
+async function cargarAudio(audio) {
+  mostrarMensaje('Escuchando el audio...');
+  try {
+    const texto = await transcribirAudio(audio);
+    $('conversacion').value = `Audio del cliente: ${texto}`;
+    extraer(`Audio: "${texto}". `);
+  } catch (error) {
+    mostrarMensaje(error.message, true);
+  }
+}
+
+async function extraer(prefijo = '') {
   const texto = $('conversacion').value.trim();
   if (!texto) return mostrarMensaje('Pegá una conversación primero.', true);
 
@@ -233,18 +244,27 @@ async function extraer() {
 
   if (datos.error) return mostrarMensaje(datos.error, true);
   $('conversacion').value = '';
-  if (!datos.pedido) return mostrarMensaje(`No es un pedido. Respuesta sugerida: ${datos.respuesta}`);
-  mostrarMensaje(datos.pedido.estado === 'nuevo'
+  if (!datos.pedido) return mostrarMensaje(`${prefijo}No es un pedido. Respuesta sugerida: ${datos.respuesta}`);
+  mostrarMensaje(prefijo + (datos.pedido.estado === 'nuevo'
     ? `Pedido #${datos.pedido.id} completo: ya está en cocina.`
-    : `Pedido #${datos.pedido.id} cargado: falta responderle al cliente.`);
+    : `Pedido #${datos.pedido.id} cargado: falta responderle al cliente.`));
   actualizar();
 }
 
-$('extraer').addEventListener('click', extraer);
+$('extraer').addEventListener('click', () => extraer());
+crearGrabador($('microfono'), {
+  alTerminar: cargarAudio,
+  alError: (mensaje) => mostrarMensaje(mensaje, true),
+});
+$('archivo-audio').addEventListener('change', (evento) => {
+  const [archivo] = evento.target.files;
+  if (archivo) cargarAudio(archivo);
+  evento.target.value = '';
+});
 $('ejemplo').addEventListener('click', () => {
   $('conversacion').value = EJEMPLOS[ejemploActual++ % EJEMPLOS.length];
   extraer();
 });
 
 actualizar();
-setInterval(actualizar, 3000);
+setInterval(actualizar, new URLSearchParams(location.search).has('demo') ? 1000 : 3000);

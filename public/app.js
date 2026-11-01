@@ -399,6 +399,19 @@ $('formulario').addEventListener('submit', (evento) => {
 });
 $('ejemplo').addEventListener('click', () => enviarMensaje(MENSAJE_EJEMPLO));
 $('nuevo').addEventListener('click', reiniciar);
+crearGrabador($('microfono'), {
+  alTerminar: async (audio) => {
+    const aviso = agregarBurbuja('bot', 'Escuchando tu audio...');
+    try {
+      const texto = await transcribirAudio(audio);
+      aviso.remove();
+      enviarMensaje(texto);
+    } catch (error) {
+      aviso.textContent = error.message;
+    }
+  },
+  alError: (mensaje) => agregarBurbuja('bot', mensaje),
+});
 
 fetch('/api/negocio')
   .then((r) => r.json())

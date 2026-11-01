@@ -30,11 +30,15 @@
 
     <details class="bg-white rounded-xl shadow-sm p-4">
       <summary class="font-semibold cursor-pointer">Bandeja de WhatsApp y teléfono</summary>
-      <p class="text-sm text-stone-600 mt-2">Pegá cada conversación. La IA la convierte en pedido y te dice qué falta preguntar.</p>
+      <p class="text-sm text-stone-600 mt-2">Pegá la conversación o cargá el audio. La IA arma el pedido y te dice qué falta preguntar.</p>
       <textarea id="conversacion" rows="5" maxlength="3000" aria-label="Conversación de WhatsApp" class="mt-2 w-full rounded-lg border border-stone-300 p-2"></textarea>
       <div class="flex flex-wrap gap-2 mt-2">
         <button id="extraer" type="button" class="rounded-lg bg-orange-700 text-white font-semibold px-4 py-2 disabled:opacity-50">Cargar a la bandeja</button>
         <button id="ejemplo" type="button" class="rounded-lg border border-stone-300 px-4 py-2">Probar con un ejemplo</button>
+        <button id="microfono" type="button" aria-label="Grabar un audio" class="rounded-lg border border-stone-300 px-4 py-2">Grabar audio</button>
+        <label class="rounded-lg border border-stone-300 px-4 py-2 cursor-pointer focus-within:outline focus-within:outline-orange-700">Subir audio
+          <input id="archivo-audio" type="file" accept="audio/*,.ogg,.opus,.m4a,.mp3" class="sr-only">
+        </label>
       </div>
       <p id="mensaje-chat" class="hidden mt-2 text-sm"></p>
     </details>
@@ -42,6 +46,7 @@
     <div id="tablero" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div>
   </main>
 
+  <script src="audio.js"></script>
   <script src="panel.js"></script>
 </body>
 </html>

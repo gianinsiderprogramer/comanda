@@ -16,9 +16,12 @@
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
       <div>
         <h1 class="font-titulo text-2xl">Comanda · Pedidos del día</h1>
-        <p id="resumen" class="text-sm text-stone-300">Sin pedidos todavía</p>
+        <p id="resumen" class="text-sm text-stone-300">Cargando pedidos...</p>
       </div>
-      <a href="/" class="text-sm underline">Ver como cliente</a>
+      <div class="flex items-center gap-4">
+        <button id="reiniciar" type="button" class="rounded-lg border border-stone-500 text-sm px-3 py-1.5 hover:bg-stone-800">Reiniciar demo</button>
+        <a href="/" class="text-sm underline">Ver como cliente</a>
+      </div>
     </div>
   </header>
 
@@ -28,7 +31,7 @@
       <ul id="lista-cocina" class="mt-2 flex flex-wrap gap-2"></ul>
     </section>
 
-    <details class="bg-white rounded-xl shadow-sm p-4">
+    <details class="bg-white rounded-xl shadow-sm p-4" open>
       <summary class="font-semibold cursor-pointer">Bandeja de WhatsApp y teléfono</summary>
       <p class="text-sm text-stone-600 mt-2">Pegá la conversación o cargá el audio. La IA arma el pedido y te dice qué falta preguntar.</p>
       <textarea id="conversacion" rows="5" maxlength="3000" aria-label="Conversación de WhatsApp" class="mt-2 w-full rounded-lg border border-stone-300 p-2"></textarea>
@@ -43,7 +46,13 @@
       <p id="mensaje-chat" class="hidden mt-2 text-sm"></p>
     </details>
 
-    <div id="tablero" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5"></div>
+    <div id="tablero" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5" aria-busy="true">
+      <div class="bg-stone-200 rounded-xl p-3 space-y-3 min-h-40 animate-pulse motion-reduce:animate-none"><div class="h-5 w-2/3 rounded bg-stone-300"></div><div class="h-24 rounded-lg bg-white"></div></div>
+      <div class="bg-stone-200 rounded-xl p-3 space-y-3 min-h-40 animate-pulse motion-reduce:animate-none"><div class="h-5 w-1/2 rounded bg-stone-300"></div><div class="h-24 rounded-lg bg-white"></div></div>
+      <div class="bg-stone-200 rounded-xl p-3 space-y-3 min-h-40 animate-pulse motion-reduce:animate-none"><div class="h-5 w-3/4 rounded bg-stone-300"></div><div class="h-24 rounded-lg bg-white"></div></div>
+      <div class="bg-stone-200 rounded-xl p-3 space-y-3 min-h-40 animate-pulse motion-reduce:animate-none"><div class="h-5 w-1/2 rounded bg-stone-300"></div><div class="h-24 rounded-lg bg-white"></div></div>
+      <div class="bg-stone-200 rounded-xl p-3 space-y-3 min-h-40 animate-pulse motion-reduce:animate-none"><div class="h-5 w-2/3 rounded bg-stone-300"></div><div class="h-24 rounded-lg bg-white"></div></div>
+    </div>
   </main>
 
   <script src="audio.js"></script>

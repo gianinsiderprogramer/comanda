@@ -1,8 +1,8 @@
 const MENSAJES = [
   {
     nombre: 'Caro',
-    texto: 'holaa mandame 2 pollos enteros y 2 papas a Mitre 450, Centro, pago con transfe. Soy Caro 3414001122',
-    respaldo: { items: [{ producto_id: 'pollo_entero', cantidad: 2 }, { producto_id: 'papas', cantidad: 2 }], entrega_tipo: 'envio', direccion: 'Mitre 450', zona_id: 'centro', cliente_nombre: 'Caro', telefono: '3414001122', medio_pago: 'transferencia' },
+    texto: 'holaa mandame 2 pollos enteros y 2 papas a Mitre 450, Centro, para las 21, pago con transfe. Soy Caro 3414001122',
+    respaldo: { items: [{ producto_id: 'pollo_entero', cantidad: 2 }, { producto_id: 'papas', cantidad: 2 }], entrega_tipo: 'envio', direccion: 'Mitre 450', zona_id: 'centro', hora: '21:00', cliente_nombre: 'Caro', telefono: '3414001122', medio_pago: 'transferencia' },
   },
   {
     nombre: 'Nico',
@@ -13,12 +13,12 @@ const MENSAJES = [
     nombre: 'Flor',
     texto: '3 milanesas con papas porfa',
     respaldo: { items: [{ producto_id: 'milanesa_papas', cantidad: 3 }], cliente_nombre: 'Flor' },
-    mensajeRespaldo: 'Hola Flor! ¿Las milanesas de carne o de pollo?',
+    mensajeRespaldo: '¡Hola, Flor! Te anoto 3 milanesas con papas. ¿Las querés de carne o de pollo? ¿Con envío o pasás a retirar? ¿Para qué hora? ¿Cómo pagás: efectivo, transferencia o mercadopago?',
   },
   {
     nombre: 'Raúl',
-    texto: 'Buenas noches. Quisiera un pastel de papa y una tarta de verdura. Paso a retirar. Raúl, 3416003344. Pago en efectivo.',
-    respaldo: { items: [{ producto_id: 'pastel_papa', cantidad: 1 }, { producto_id: 'tarta', variante: 'verdura', cantidad: 1 }], entrega_tipo: 'retiro', cliente_nombre: 'Raúl', telefono: '3416003344', medio_pago: 'efectivo' },
+    texto: 'Buenas noches. Quisiera un pastel de papa y una tarta de verdura. Paso a retirar a las 20:30. Raúl, 3416003344. Pago en efectivo.',
+    respaldo: { items: [{ producto_id: 'pastel_papa', cantidad: 1 }, { producto_id: 'tarta', variante: 'verdura', cantidad: 1 }], entrega_tipo: 'retiro', hora: '20:30', cliente_nombre: 'Raúl', telefono: '3416003344', medio_pago: 'efectivo' },
   },
   {
     nombre: 'Ana',
@@ -26,19 +26,19 @@ const MENSAJES = [
   },
   {
     nombre: 'Lucho',
-    texto: '2 muzzas y una fugazzeta, Oroño 1200 Pichincha, lucho 3417004455, mp',
-    respaldo: { items: [{ producto_id: 'pizza_muzza', cantidad: 2 }], entrega_tipo: 'envio', direccion: 'Oroño 1200', zona_id: 'pichincha', cliente_nombre: 'Lucho', telefono: '3417004455', medio_pago: 'mercadopago' },
+    texto: '2 muzzas y una fugazzeta, Oroño 1200 Pichincha, para las 22, lucho 3417004455, mp',
+    respaldo: { items: [{ producto_id: 'pizza_muzza', cantidad: 2 }], entrega_tipo: 'envio', direccion: 'Oroño 1200', zona_id: 'pichincha', hora: '22:00', cliente_nombre: 'Lucho', telefono: '3417004455', medio_pago: 'mercadopago' },
   },
   {
     nombre: 'Maru',
     texto: 'me mandás un pollo? ah y ensalada. después te paso la dirección',
     respaldo: { items: [{ producto_id: 'pollo_entero', cantidad: 1 }, { producto_id: 'ensalada', cantidad: 1 }], entrega_tipo: 'envio', cliente_nombre: 'Maru' },
-    mensajeRespaldo: 'Hola Maru! ¿A qué dirección te lo mandamos?',
+    mensajeRespaldo: '¡Hola, Maru! Te anoto un pollo entero y una ensalada con envío. ¿A qué dirección y en qué barrio? ¿Para qué hora? ¿Cómo pagás: efectivo, transferencia o mercadopago?',
   },
   {
     nombre: 'Beto',
-    texto: '6 de carne. no perdon 12. y una coca a San Luis 900, centro. beto 3418005566, efectivo',
-    respaldo: { items: [{ producto_id: 'empanada', variante: 'carne', cantidad: 12 }, { producto_id: 'coca_15', cantidad: 1 }], entrega_tipo: 'envio', direccion: 'San Luis 900', zona_id: 'centro', cliente_nombre: 'Beto', telefono: '3418005566', medio_pago: 'efectivo' },
+    texto: '6 de carne. no perdon 12. y una coca a San Luis 900, centro, lo antes posible. beto 3418005566, efectivo',
+    respaldo: { items: [{ producto_id: 'empanada', variante: 'carne', cantidad: 12 }, { producto_id: 'coca_15', cantidad: 1 }], entrega_tipo: 'envio', direccion: 'San Luis 900', zona_id: 'centro', hora: 'lo antes posible', cliente_nombre: 'Beto', telefono: '3418005566', medio_pago: 'efectivo' },
   },
 ];
 

@@ -5,13 +5,12 @@ Marcos: dale mandame uno entero con papas
 Marcos: ah y 2 flanes
 Marcos: no perdón, un solo flan
 El Patio: Perfecto, ¿a dónde te lo mando?
-Marcos: Corrientes 850, Centro. Pago en efectivo. Mi cel es 3416667788`,
-  `Sofi: hola! me guardás 6 empanadas de carne y una coca para esta noche?
-Sofi: te escribo del 3419990011`,
+Marcos: Corrientes 850, Centro, para las 21. Pago en efectivo. Mi cel es 3416667788`,
+  `Sofi: hola buenas!! me mandas 2 milas a la napo y media docena de empanadas, de pollo si hay sino de carne. ah y una coca grande. paso a buscar tipo 9 y media`,
 ];
 
 const COLUMNAS = [
-  { estado: 'pendiente', titulo: 'A responder', accion: 'Pasar a cocina', siguiente: 'nuevo' },
+  { estado: 'pendiente', titulo: 'A responder' },
   { estado: 'nuevo', titulo: 'Nuevos', accion: 'Empezar a preparar', siguiente: 'preparacion' },
   { estado: 'preparacion', titulo: 'En preparación', accion: 'Marcar listo', siguiente: 'listo' },
   { estado: 'listo', titulo: 'Listos', accion: 'Marcar entregado', siguiente: 'entregado' },
@@ -124,7 +123,7 @@ function tarjeta(pedido, columna, esNuevo) {
 
   const acciones = nodo('div', 'flex flex-wrap gap-2 pt-1');
   if (columna.siguiente) {
-    const avanzar = nodo('button', pedido.estado === 'pendiente' ? 'flex-1 rounded-lg border border-stone-300 text-sm px-3 py-2' : 'flex-1 rounded-lg bg-orange-700 text-white text-sm font-semibold px-3 py-2', columna.accion);
+    const avanzar = nodo('button', 'flex-1 rounded-lg bg-orange-700 text-white text-sm font-semibold px-3 py-2', columna.accion);
     avanzar.type = 'button';
     avanzar.addEventListener('click', () => cambiarEstado(pedido.id, columna.siguiente));
     acciones.append(avanzar);
@@ -156,6 +155,7 @@ function mostrarCocina(pedidos) {
 function mostrarTablero(pedidos) {
   const tablero = $('tablero');
   tablero.replaceChildren();
+  tablero.removeAttribute('aria-busy');
 
   for (const columna of COLUMNAS) {
     const delEstado = pedidos.filter((p) => p.estado === columna.estado);
@@ -189,7 +189,7 @@ async function actualizar() {
     const respuesta = await fetch('/api/pedidos');
     if (respuesta.ok) mostrarTablero((await respuesta.json()).pedidos);
   } catch {
-    // reintenta en el próximo ciclo
+    if (conocidos === null) $('resumen').textContent = 'No pudimos cargar los pedidos. Reintentando...';
   }
 }
 
@@ -253,6 +253,13 @@ async function extraer(prefijo = '') {
   actualizar();
 }
 
+$('reiniciar').addEventListener('click', async () => {
+  if (!confirm('¿Borrar todos los pedidos y volver a los de ejemplo?')) return;
+  await enviar('/api/demo/reiniciar', {});
+  conocidos = null;
+  mostrarMensaje('');
+  actualizar();
+});
 $('extraer').addEventListener('click', () => extraer());
 crearGrabador($('microfono'), {
   alTerminar: cargarAudio,

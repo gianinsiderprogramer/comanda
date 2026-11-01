@@ -7,6 +7,7 @@ const PASOS = [
 ];
 const CAMPOS_DE_TEXTO = [
   { faltante: 'direccion', campo: 'direccion', etiqueta: 'Dirección', tipo: 'text' },
+  { faltante: 'hora', campo: 'hora', etiqueta: 'Hora (ej: 21:30)', tipo: 'text' },
   { faltante: 'nombre', campo: 'cliente_nombre', etiqueta: 'Tu nombre', tipo: 'text' },
   { faltante: 'telefono', campo: 'telefono', etiqueta: 'Teléfono', tipo: 'tel' },
 ];
@@ -15,6 +16,7 @@ const ETIQUETAS_FALTANTE = {
   entrega_tipo: 'Envío o retiro',
   direccion: 'Dirección',
   zona: 'Barrio',
+  hora: 'Hora',
   nombre: 'Tu nombre',
   telefono: 'Teléfono',
   medio_pago: 'Medio de pago',
@@ -46,6 +48,10 @@ function mostrarEscribiendo() {
   burbuja.setAttribute('aria-label', 'Escribiendo');
   burbuja.innerHTML = '<span></span><span></span><span></span>';
   return burbuja;
+}
+
+function textoHora(hora) {
+  return /\d/.test(hora) ? `Para las ${hora}` : 'Lo antes posible';
 }
 
 function nombreItem(item) {
@@ -121,6 +127,7 @@ function opcionesParaFaltante(faltante) {
       { texto: 'Paso a retirar', cambios: { entrega_tipo: 'retiro' } },
     ];
   }
+  if (faltante === 'hora') return [{ texto: 'Lo antes posible', cambios: { hora: 'lo antes posible' } }];
   if (faltante === 'zona') return negocio.zonas.map((z) => ({ texto: z.nombre, cambios: { zona_id: z.id } }));
   if (faltante === 'medio_pago') return negocio.medios_pago.map((m) => ({ texto: m[0].toUpperCase() + m.slice(1), cambios: { medio_pago: m } }));
   if (faltante?.startsWith('variante:')) {
@@ -233,7 +240,7 @@ function mostrarTicket() {
 
     const datos = [
       borrador.entrega_tipo === 'retiro' ? 'Retira en el local' : borrador.direccion,
-      borrador.hora && `Para las ${borrador.hora}`,
+      borrador.hora && textoHora(borrador.hora),
       borrador.cliente_nombre,
       borrador.telefono,
       borrador.medio_pago,
@@ -344,7 +351,7 @@ function mostrarConfirmado(pedido) {
   $('vista-confirmado').classList.remove('hidden');
   $('numero').textContent = `#${pedido.id}`;
   mostrarPasos(pedido.estado);
-  $('demora').textContent = pedido.hora ? `Para las ${pedido.hora}` : `Demora estimada: ${minutos} minutos`;
+  $('demora').textContent = /\d/.test(pedido.hora) ? textoHora(pedido.hora) : `Demora estimada: ${minutos} minutos`;
   $('compartir').href = `https://wa.me/?text=${encodeURIComponent(textoCompartir(pedido))}`;
 
   clearInterval(seguimiento);

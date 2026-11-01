@@ -2,7 +2,7 @@
 
 **Pedidos por mensaje para rotiserías:** el cliente escribe como en WhatsApp, la IA lo convierte en un pedido sin errores y el local lo recibe en un tablero.
 
-**URL del deploy:** pendiente
+**URL del deploy:** https://vps-6571693-x.dattaweb.com
 
 Hoy el dueño de una rotisería pierde ventas en la hora pico: los mensajes se pierden, los pedidos se anotan mal y los clientes se cansan de esperar.
 

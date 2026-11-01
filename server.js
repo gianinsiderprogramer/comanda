@@ -19,6 +19,8 @@ const LLAMADAS_POR_MINUTO = 20;
 const app = express();
 const raiz = path.dirname(fileURLToPath(import.meta.url));
 
+// En producción Nginx hace de proxy: sin esto todos los visitantes comparten la misma IP.
+app.set('trust proxy', 'loopback');
 app.use(express.json({ limit: '50kb' }));
 app.use(express.static(path.join(raiz, 'public'), { extensions: ['html'] }));
 

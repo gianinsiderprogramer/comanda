@@ -245,7 +245,7 @@ async function extraer(prefijo = '') {
 
   if (datos.error) return mostrarMensaje(datos.error, true);
   $('conversacion').value = '';
-  if (!datos.pedido) return mostrarMensaje(`${prefijo}No es un pedido. Respuesta sugerida: ${datos.respuesta}`);
+  if (!datos.pedido) return mostrarMensaje(`${prefijo}No se cargó ningún pedido. Respuesta sugerida: ${datos.respuesta}`);
   mostrarMensaje(prefijo + (datos.pedido.estado === 'nuevo'
     ? `Pedido #${datos.pedido.id} completo: ya está en cocina.`
     : `Pedido #${datos.pedido.id} cargado: falta responderle al cliente.`));

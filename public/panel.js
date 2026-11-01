@@ -79,6 +79,7 @@ function formularioCompletar(pedido) {
       return;
     }
     entrada.value = '';
+    entrada.blur();
     actualizar();
   });
 

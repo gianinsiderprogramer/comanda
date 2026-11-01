@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comanda · Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,700&display=swap">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="tema.js"></script>
+</head>
+<body class="bg-stone-900 text-white font-sans min-h-screen flex flex-col">
+  <header class="px-4 py-3 flex flex-wrap items-baseline gap-x-3">
+    <h1 class="font-titulo text-2xl">Comanda</h1>
+    <p class="text-sm text-stone-300">Del mensaje del cliente a la cocina, sin que nada se pierda.</p>
+  </header>
+  <main class="flex-1 grid gap-4 px-4 pb-4 lg:grid-cols-[390px_1fr]">
+    <section class="flex flex-col min-h-[80vh]">
+      <h2 class="text-sm font-bold text-orange-400 mb-2">Lo que ve el cliente</h2>
+      <iframe src="/" title="Pantalla del cliente" class="flex-1 w-full rounded-2xl bg-white border-4 border-stone-800"></iframe>
+    </section>
+    <section class="flex flex-col min-h-[80vh] min-w-0">
+      <h2 class="text-sm font-bold text-orange-400 mb-2">Lo que ve el local</h2>
+      <iframe src="/panel" title="Tablero del local" class="flex-1 w-full rounded-2xl bg-white border-4 border-stone-800"></iframe>
+    </section>
+  </main>
+</body>
+</html>

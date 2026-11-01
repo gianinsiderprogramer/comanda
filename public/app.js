@@ -1,10 +1,15 @@
 const MENSAJE_EJEMPLO = 'hola! mandame una docena de empanadas, 6 de carne y 6 de jamón y queso, un pollo entero y una coca. Es a Mendoza 1234, Centro, para las 21. Soy Laura, 3415551234, pago por transferencia';
-const ETIQUETAS_ESTADO = {
-  nuevo: 'Recibimos tu pedido',
-  preparacion: 'Lo estamos preparando',
-  listo: 'Tu pedido está listo',
-  entregado: 'Pedido entregado. ¡Que lo disfrutes!',
-};
+const PASOS = [
+  { estado: 'nuevo', etiqueta: 'Recibido' },
+  { estado: 'preparacion', etiqueta: 'Preparando' },
+  { estado: 'listo', etiqueta: 'Listo' },
+  { estado: 'entregado', etiqueta: 'Entregado' },
+];
+const CAMPOS_DE_TEXTO = [
+  { faltante: 'direccion', campo: 'direccion', etiqueta: 'Dirección', tipo: 'text' },
+  { faltante: 'nombre', campo: 'cliente_nombre', etiqueta: 'Tu nombre', tipo: 'text' },
+  { faltante: 'telefono', campo: 'telefono', etiqueta: 'Teléfono', tipo: 'tel' },
+];
 const ETIQUETAS_FALTANTE = {
   productos: 'Productos',
   entrega_tipo: 'Envío o retiro',
@@ -67,9 +72,46 @@ function botonCantidad(texto, etiqueta, accion) {
   boton.type = 'button';
   boton.textContent = texto;
   boton.setAttribute('aria-label', etiqueta);
-  boton.className = 'w-7 h-7 rounded-full border border-stone-300 leading-none hover:bg-stone-100';
+  boton.className = 'w-7 h-7 shrink-0 rounded-full border border-stone-300 leading-none hover:bg-stone-100';
   boton.addEventListener('click', accion);
   return boton;
+}
+
+function formularioDatos() {
+  const campos = CAMPOS_DE_TEXTO.filter((c) => borrador.faltantes.includes(c.faltante));
+  if (!campos.length) return null;
+
+  const formulario = document.createElement('form');
+  formulario.className = 'mt-3 space-y-2';
+  for (const { campo, etiqueta, tipo } of campos) {
+    const entrada = document.createElement('input');
+    entrada.name = campo;
+    entrada.type = tipo;
+    entrada.placeholder = etiqueta;
+    entrada.maxLength = 100;
+    entrada.setAttribute('aria-label', etiqueta);
+    entrada.className = 'w-full rounded-lg border border-stone-300 px-3 py-1.5 bg-white';
+    formulario.append(entrada);
+  }
+
+  const guardar = document.createElement('button');
+  guardar.textContent = 'Guardar datos';
+  guardar.className = 'w-full rounded-lg border border-orange-700 text-orange-800 font-bold py-1.5 hover:bg-orange-50';
+  formulario.append(guardar);
+
+  formulario.addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+    const datos = Object.fromEntries([...new FormData(formulario)].filter(([, valor]) => valor.trim()));
+    if (Object.keys(datos).length) await recalcular({ ...borrador, ...datos });
+  });
+  return formulario;
+}
+
+async function sumarDeLaCarta(producto) {
+  await recalcular({ ...borrador, items: [...borrador.items, { producto_id: producto.id, cantidad: 1 }] });
+  if (borrador.faltantes[0]?.startsWith('variante:')) {
+    $('opciones').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 }
 
 function opcionesParaFaltante(faltante) {
@@ -183,7 +225,7 @@ function mostrarTicket() {
 
   if (borrador.items.length) {
     const totales = document.createElement('div');
-    totales.className = 'mt-3 pt-3 border-t space-y-1 tabular-nums';
+    totales.className = 'mt-3 pt-3 border-t border-dashed border-stone-300 space-y-1 tabular-nums';
     if (borrador.descuento) totales.append(fila('Promo docena', `−${pesos(borrador.descuento)}`, 'text-green-700'));
     if (borrador.entrega_tipo === 'envio' && borrador.envio) totales.append(fila(`Envío a ${borrador.zona_nombre}`, pesos(borrador.envio)));
     totales.append(fila('Total', pesos(borrador.total), 'font-bold text-lg'));
@@ -208,6 +250,8 @@ function mostrarTicket() {
       faltan.className = 'mt-3 text-sm text-stone-600';
       faltan.textContent = `Falta: ${borrador.faltantes.map(etiquetaFaltante).join(', ')}`;
       ticket.append(faltan);
+      const formulario = formularioDatos();
+      if (formulario) ticket.append(formulario);
     }
 
     const confirmar = document.createElement('button');
@@ -259,7 +303,8 @@ async function enviarMensaje(texto) {
   } catch (error) {
     mensajes.pop();
     escribiendo.remove();
-    agregarBurbuja('bot', error.message);
+    agregarBurbuja('bot', `${error.message} Mientras tanto, podés armar tu pedido desde la carta.`);
+    $('detalle-carta').open = true;
     $('mensaje').value = limpio;
   } finally {
     esperando = false;
@@ -282,12 +327,23 @@ function textoCompartir(pedido) {
   return `Pedido #${pedido.id} en ${negocio.nombre}\n${detalle}\nTotal: ${pesos(pedido.total)}`;
 }
 
+function mostrarPasos(estado) {
+  const actual = PASOS.findIndex((p) => p.estado === estado);
+  $('pasos').replaceChildren(...PASOS.map((paso, indice) => {
+    const elemento = document.createElement('li');
+    elemento.className = indice <= actual ? 'paso paso-hecho' : 'paso';
+    elemento.textContent = paso.etiqueta;
+    if (indice === actual) elemento.setAttribute('aria-current', 'step');
+    return elemento;
+  }));
+}
+
 function mostrarConfirmado(pedido) {
   const minutos = negocio.demora_minutos[pedido.entrega_tipo];
   $('vista-pedido').classList.add('hidden');
   $('vista-confirmado').classList.remove('hidden');
   $('numero').textContent = `#${pedido.id}`;
-  $('estado').textContent = ETIQUETAS_ESTADO[pedido.estado];
+  mostrarPasos(pedido.estado);
   $('demora').textContent = pedido.hora ? `Para las ${pedido.hora}` : `Demora estimada: ${minutos} minutos`;
   $('compartir').href = `https://wa.me/?text=${encodeURIComponent(textoCompartir(pedido))}`;
 
@@ -296,7 +352,7 @@ function mostrarConfirmado(pedido) {
     const respuesta = await fetch(`/api/pedidos/${pedido.id}`).catch(() => null);
     if (!respuesta?.ok) return;
     const datos = await respuesta.json();
-    $('estado').textContent = ETIQUETAS_ESTADO[datos.pedido.estado];
+    mostrarPasos(datos.pedido.estado);
     if (datos.pedido.estado === 'entregado') clearInterval(seguimiento);
   }, 4000);
 }
@@ -321,13 +377,16 @@ function mostrarCarta() {
   const categorias = Map.groupBy(negocio.productos, (p) => p.categoria);
   for (const [categoria, productos] of categorias) {
     const titulo = document.createElement('h3');
-    titulo.className = 'font-semibold text-orange-800';
+    titulo.className = 'font-bold text-orange-800';
     titulo.textContent = categoria;
     const lista = document.createElement('ul');
+    lista.className = 'space-y-1 mt-1';
     for (const producto of productos) {
       const elemento = document.createElement('li');
-      elemento.className = producto.disponible ? '' : 'text-stone-400 line-through';
-      elemento.append(fila(producto.nombre, pesos(producto.precio)));
+      elemento.className = producto.disponible ? 'flex items-center gap-2' : 'flex items-center gap-2 text-stone-500';
+      const detalle = fila(producto.disponible ? producto.nombre : `${producto.nombre} (hoy no hay)`, pesos(producto.precio), 'flex-1 min-w-0');
+      elemento.append(detalle);
+      if (producto.disponible) elemento.append(botonCantidad('+', `Sumar ${producto.nombre}`, () => sumarDeLaCarta(producto)));
       lista.append(elemento);
     }
     $('carta').append(titulo, lista);

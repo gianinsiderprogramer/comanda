@@ -1,0 +1,31 @@
+{
+  "nombre": "Rotisería El Patio",
+  "ciudad": "Rosario",
+  "horarios": "Martes a domingo, de 11:30 a 14:30 y de 19:30 a 23:00. Lunes cerrado.",
+  "demora_minutos": { "retiro": 25, "envio": 45 },
+  "medios_pago": ["efectivo", "transferencia", "mercadopago"],
+  "nota_sin_tacc": "Los platos marcados no llevan gluten, pero la cocina es compartida y puede haber contaminación cruzada: no son aptos para celíacos estrictos.",
+  "promo_empanadas": { "cantidad": 12, "precio": 18000 },
+  "zonas": [
+    { "id": "centro", "nombre": "Centro", "costo": 2500 },
+    { "id": "pichincha", "nombre": "Pichincha", "costo": 2500 },
+    { "id": "martin", "nombre": "Martin", "costo": 3000 },
+    { "id": "abasto", "nombre": "Abasto", "costo": 3000 },
+    { "id": "echesortu", "nombre": "Echesortu", "costo": 3500 }
+  ],
+  "productos": [
+    { "id": "empanada", "nombre": "Empanada", "categoria": "Empanadas", "precio": 1800, "variantes": ["carne", "pollo", "jamón y queso", "verdura", "humita"], "disponible": true, "sin_tacc": false },
+    { "id": "pollo_entero", "nombre": "Pollo al spiedo entero", "categoria": "Spiedo", "precio": 19000, "variantes": [], "disponible": true, "sin_tacc": true },
+    { "id": "pollo_medio", "nombre": "Medio pollo al spiedo", "categoria": "Spiedo", "precio": 10500, "variantes": [], "disponible": true, "sin_tacc": true },
+    { "id": "milanesa_papas", "nombre": "Milanesa con papas fritas", "categoria": "Platos", "precio": 14000, "variantes": ["carne", "pollo"], "disponible": true, "sin_tacc": false },
+    { "id": "pastel_papa", "nombre": "Pastel de papa", "categoria": "Platos", "precio": 11000, "variantes": [], "disponible": true, "sin_tacc": true },
+    { "id": "tarta", "nombre": "Tarta individual", "categoria": "Platos", "precio": 8500, "variantes": ["jamón y queso", "verdura", "calabaza"], "disponible": true, "sin_tacc": false },
+    { "id": "pizza_muzza", "nombre": "Pizza de muzzarella", "categoria": "Pizzas", "precio": 12000, "variantes": [], "disponible": true, "sin_tacc": false },
+    { "id": "fugazzeta", "nombre": "Fugazzeta", "categoria": "Pizzas", "precio": 14500, "variantes": [], "disponible": false, "sin_tacc": false },
+    { "id": "papas", "nombre": "Porción de papas fritas", "categoria": "Guarniciones", "precio": 6000, "variantes": [], "disponible": true, "sin_tacc": true },
+    { "id": "ensalada", "nombre": "Ensalada mixta", "categoria": "Guarniciones", "precio": 5000, "variantes": [], "disponible": true, "sin_tacc": true },
+    { "id": "coca_15", "nombre": "Coca-Cola 1,5 L", "categoria": "Bebidas", "precio": 4500, "variantes": [], "disponible": true, "sin_tacc": true },
+    { "id": "agua_15", "nombre": "Agua sin gas 1,5 L", "categoria": "Bebidas", "precio": 3000, "variantes": [], "disponible": true, "sin_tacc": true },
+    { "id": "flan", "nombre": "Flan casero con dulce de leche", "categoria": "Postres", "precio": 3500, "variantes": [], "disponible": true, "sin_tacc": true }
+  ]
+}
